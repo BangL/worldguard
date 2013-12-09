@@ -33,6 +33,7 @@ import org.bukkit.entity.Enderman;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Fireball;
+import org.bukkit.entity.ItemFrame;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
@@ -237,6 +238,13 @@ public class WorldGuardEntityListener implements Listener {
             }
         }
 
+        if (defender instanceof ItemFrame) {
+            if (checkItemFrameProtection(attacker, (ItemFrame) defender)) {
+                event.setCancelled(true);
+                return;
+            }
+        }
+
         if (defender instanceof Player) {
             Player player = (Player) defender;
             LocalPlayer localPlayer = plugin.wrapPlayer(player);
@@ -436,6 +444,11 @@ public class WorldGuardEntityListener implements Listener {
                         tryCancelPVPEvent((Player) attacker, player, event, false);
                     }
                 }
+            }
+        } else if (defender instanceof ItemFrame) {
+            if (checkItemFrameProtection(attacker, (ItemFrame) defender)) {
+                event.setCancelled(true);
+                return;
             }
         }
 
@@ -989,4 +1002,41 @@ public class WorldGuardEntityListener implements Listener {
             event.setCancelled(true);
         }
     }
+
+    /**
+     * Checks regions and config settings to protect items from being knocked
+     * out of item frames.
+     * @param attacker attacking entity
+     * @param defender item frame being damaged
+     * @return true if the event should be cancelled
+     */
+    private boolean checkItemFrameProtection(Entity attacker, ItemFrame defender) {
+        World world = attacker.getWorld();
+        ConfigurationManager cfg = plugin.getGlobalStateManager();
+        WorldConfiguration wcfg = cfg.get(world);
+        if (wcfg.useRegions) {
+        // bukkit throws this event when a player attempts to remove an item from a frame
+            RegionManager mgr = plugin.getGlobalRegionManager().get(world);
+            if (attacker instanceof Player) {
+                Player player = (Player) attacker;
+                LocalPlayer localPlayer = plugin.wrapPlayer(player);
+                if (!plugin.getGlobalRegionManager().hasBypass(player, world)
+                        && !mgr.getApplicableRegions(defender.getLocation())
+                                .canBuild(localPlayer)) {
+                    player.sendMessage(ChatColor.DARK_RED + "You don't have permission for this area.");
+                    return true;
+                }
+            } else {
+                if (!plugin.getGlobalRegionManager().allows(
+                        DefaultFlag.ENTITY_ITEM_FRAME_DESTROY, defender.getLocation())) {
+                    return true;
+                }
+            }
+        }
+        if (wcfg.blockEntityItemFrameDestroy && !(attacker instanceof Player)) {
+            return true;
+        }
+        return false;
+    }
+
 }
