@@ -438,7 +438,7 @@ public final class RegionCommands {
         }
 
         regionManager.addRegion(region);
-        commitChanges(sender, regionManager); // Save to disk
+        //commitChanges(sender, regionManager); // Save to disk
         
         // Issue a warning about height
         int height = region.getMaximumPoint().getBlockY() - region.getMinimumPoint().getBlockY();
@@ -503,7 +503,7 @@ public final class RegionCommands {
         }
 
         regionManager.addRegion(region); // Replace region
-        commitChanges(sender, regionManager); // Save to disk
+        //commitChanges(sender, regionManager); // Save to disk
 
         // Issue a warning about height
         int height = region.getMaximumPoint().getBlockY() - region.getMinimumPoint().getBlockY();
@@ -630,7 +630,7 @@ public final class RegionCommands {
         region.getOwners().addPlayer(player.getName());
         
         mgr.addRegion(region);
-        commitChanges(sender, mgr); // Save to disk
+        //commitChanges(sender, mgr); // Save to disk
         sender.sendMessage(ChatColor.YELLOW + "Region '" + id + "' updated with new area.");
     }
 
@@ -930,7 +930,7 @@ public final class RegionCommands {
             }
         }
 
-        commitChanges(sender, regionManager); // Save to disk
+        //commitChanges(sender, regionManager); // Save to disk
 
         // Print region information
         RegionPrintoutBuilder printout = new RegionPrintoutBuilder(existing);
@@ -969,7 +969,7 @@ public final class RegionCommands {
         }
 
         existing.setPriority(priority);
-        commitChanges(sender, regionManager); // Save to disk
+        //commitChanges(sender, regionManager); // Save to disk
 
         sender.sendMessage(ChatColor.YELLOW
                 + "Priority of '" + existing.getId() + "' set to "
@@ -1026,7 +1026,7 @@ public final class RegionCommands {
             return;
         }
 
-        commitChanges(sender, regionManager); // Save to disk
+        //commitChanges(sender, regionManager); // Save to disk
         
         // Tell the user the current inheritance
         RegionPrintoutBuilder printout = new RegionPrintoutBuilder(child);
@@ -1069,7 +1069,7 @@ public final class RegionCommands {
         }
 
         regionManager.removeRegion(existing.getId());
-        commitChanges(sender, regionManager); // Save to disk
+        //commitChanges(sender, regionManager); // Save to disk
 
         sender.sendMessage(ChatColor.YELLOW
                 + "Region '" + existing.getId() + "' removed.");

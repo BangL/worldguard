@@ -94,12 +94,14 @@ public class RegionMemberCommands {
         sender.sendMessage(ChatColor.YELLOW
                 + "Region '" + id + "' updated.");
 
+        /*
         try {
             mgr.save();
         } catch (ProtectionDatabaseException e) {
             throw new CommandException("Failed to write regions: "
                     + e.getMessage());
         }
+        */
     }
 
     @Command(aliases = {"addowner", "addowner"},
@@ -164,12 +166,14 @@ public class RegionMemberCommands {
         sender.sendMessage(ChatColor.YELLOW
                 + "Region '" + id + "' updated.");
 
+        /*
         try {
             mgr.save();
         } catch (ProtectionDatabaseException e) {
             throw new CommandException("Failed to write regions: "
                     + e.getMessage());
         }
+        */
     }
 
     @Command(aliases = {"removemember", "remmember", "removemem", "remmem"},
@@ -228,12 +232,14 @@ public class RegionMemberCommands {
         sender.sendMessage(ChatColor.YELLOW
                 + "Region '" + id + "' updated.");
 
+        /*
         try {
             mgr.save();
         } catch (ProtectionDatabaseException e) {
             throw new CommandException("Failed to write regions: "
                     + e.getMessage());
         }
+        */
     }
 
     @Command(aliases = {"removeowner", "remowner"},
@@ -293,11 +299,13 @@ public class RegionMemberCommands {
         sender.sendMessage(ChatColor.YELLOW
                 + "Region '" + id + "' updated.");
 
+        /*
         try {
             mgr.save();
         } catch (ProtectionDatabaseException e) {
             throw new CommandException("Failed to write regions: "
                     + e.getMessage());
         }
+        */
     }
 }
