@@ -1144,15 +1144,17 @@ public class WorldGuardPlayerListener implements Listener {
             ApplicableRegionSet set = mgr.getApplicableRegions(pt);
             LocalPlayer localPlayer = plugin.wrapPlayer(player);
 
-            if (!plugin.getGlobalRegionManager().hasBypass(player, world)
-                    && !set.canBuild(localPlayer)) {
-                if (((type == BlockID.STONE_PRESSURE_PLATE || type == BlockID.WOODEN_PRESSURE_PLATE
+            if (!plugin.getGlobalRegionManager().hasBypass(player, world)) {
+                if ((!set.canBuild(localPlayer)
+                        && (((type == BlockID.STONE_PRESSURE_PLATE || type == BlockID.WOODEN_PRESSURE_PLATE
                         || type == BlockID.PRESSURE_PLATE_LIGHT || type == BlockID.PRESSURE_PLATE_HEAVY
                         || type == BlockID.TRIPWIRE)
                         && !set.allows(DefaultFlag.USE, localPlayer))
                         // ... trampling in a foreign region
+                        || type == BlockID.SOIL))
+                        // ... trampling in creative mode
                         || (type == BlockID.SOIL
-                        && event.getAction() == Action.PHYSICAL)) {
+                        && player.getGameMode() == GameMode.CREATIVE)) {
                     event.setUseInteractedBlock(Result.DENY);
                     event.setCancelled(true);
                     return;
