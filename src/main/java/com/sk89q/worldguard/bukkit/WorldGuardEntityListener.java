@@ -70,6 +70,7 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.entity.PotionSplashEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
+import org.bukkit.projectiles.ProjectileSource;
 
 import com.sk89q.worldedit.Vector;
 import com.sk89q.worldedit.blocks.BlockID;
@@ -330,7 +331,7 @@ public class WorldGuardEntityListener implements Listener {
                         RegionManager mgr = plugin.getGlobalRegionManager().get(player.getWorld());
                         ApplicableRegionSet set = mgr.getApplicableRegions(pt);
                         if (fireball.getShooter() instanceof Player) {
-                            Vector pt2 = toVector(fireball.getShooter().getLocation());
+                            Vector pt2 = toVector(((Player) fireball.getShooter()).getLocation());
                             if (!mgr.getApplicableRegions(pt2).allows(DefaultFlag.PVP, plugin.wrapPlayer((Player) fireball.getShooter()))) {
                                 tryCancelPVPEvent((Player) fireball.getShooter(), player, event, true);
                             } else if (!set.allows(DefaultFlag.PVP, localPlayer)) {
@@ -399,7 +400,7 @@ public class WorldGuardEntityListener implements Listener {
 
     private void onEntityDamageByProjectile(EntityDamageByEntityEvent event) {
         Entity defender = event.getEntity();
-        Entity attacker = ((Projectile) event.getDamager()).getShooter();
+        ProjectileSource attacker = ((Projectile) event.getDamager()).getShooter();
 
         if (defender instanceof Player) {
             Player player = (Player) defender;
@@ -437,7 +438,7 @@ public class WorldGuardEntityListener implements Listener {
                 if (event.getDamager() instanceof EnderPearl && attacker == player) return;
                 if (wcfg.useRegions) {
                     Vector pt = toVector(defender.getLocation());
-                    Vector pt2 = toVector(attacker.getLocation());
+                    Vector pt2 = toVector(((Player) attacker).getLocation());
                     RegionManager mgr = plugin.getGlobalRegionManager().get(player.getWorld());
 
                     if (!mgr.getApplicableRegions(pt2).allows(DefaultFlag.PVP, plugin.wrapPlayer((Player) attacker))) {
@@ -448,7 +449,7 @@ public class WorldGuardEntityListener implements Listener {
                 }
             }
         } else if (defender instanceof ItemFrame) {
-            if (checkItemFrameProtection(attacker, (ItemFrame) defender)) {
+            if (checkItemFrameProtection(((Player) attacker), (ItemFrame) defender)) {
                 event.setCancelled(true);
                 return;
             }

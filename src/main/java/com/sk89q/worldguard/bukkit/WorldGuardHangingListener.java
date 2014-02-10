@@ -82,8 +82,10 @@ public class WorldGuardHangingListener implements Listener {
             HangingBreakByEntityEvent entityEvent = (HangingBreakByEntityEvent) event;
             Entity removerEntity = entityEvent.getRemover();
             if (removerEntity instanceof Projectile) {
-                Projectile projectile = (Projectile) removerEntity; 
-                removerEntity = projectile.getShooter() != null ? projectile.getShooter() : removerEntity; 
+                Projectile projectile = (Projectile) removerEntity;
+                if (projectile.getShooter() != null && projectile.getShooter() instanceof Entity) {
+                    removerEntity = (Entity) projectile.getShooter();
+                }
             }
 
             if (removerEntity instanceof Player) {
