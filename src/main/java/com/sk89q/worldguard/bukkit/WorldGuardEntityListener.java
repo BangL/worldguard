@@ -400,7 +400,13 @@ public class WorldGuardEntityListener implements Listener {
 
     private void onEntityDamageByProjectile(EntityDamageByEntityEvent event) {
         Entity defender = event.getEntity();
-        ProjectileSource attacker = ((Projectile) event.getDamager()).getShooter();
+        Entity attacker;
+        ProjectileSource source = ((Projectile) event.getDamager()).getShooter();
+        if (source instanceof LivingEntity) {
+            attacker = (LivingEntity) source;
+        } else {
+            return;
+        }
 
         if (defender instanceof Player) {
             Player player = (Player) defender;
